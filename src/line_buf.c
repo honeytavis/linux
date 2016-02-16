@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main(void)
+void Line_Buf(void)
 {
 	int i; 
 	char a = 'a'; 
@@ -14,6 +14,6 @@ int main(void)
 	
 	//printf("\n"); 
 	while(1); 
-
-	return 0; 
 }
+
+//getchar(); 刷新输入缓冲区 

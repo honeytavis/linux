@@ -1,10 +1,25 @@
-main: main.o
-	gcc main.o -o main
+# Make variables (CC, etc...)
+CC			:= gcc
+CFLAGS		 = -Wall -I $(DIR_INC)
 
-main.o: main.c
-	gcc -c main.c -o main.o 
+EXE			:= main.exe
+DIR_SRC 	:= $(wildcard src)
+DIR_OBJ 	:= $(wildcard bin)
+DIR_INC 	:= $(wildcard include) 
+SRC 		 = $(wildcard $(DIR_SRC)/*.c)
+OBJ 		 = $(patsubst %.c, $(DIR_OBJ)/%.o, $(notdir $(SRC)))
 
-.PHONY: clean
+# ===========================================================================
+# Rules shared between targets and prerequisites
 
-clean:
-	rm main main.o
+$(EXE): $(OBJ)
+	$(CC) $^ -o $@
+
+$(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
+	$(CC) -c $< -o $@ $(CFLAGS) 
+
+PHONY += clean
+clean: 
+	@rm -f $(EXE) $(OBJ)
+
+.PHONY: PHONY
