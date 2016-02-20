@@ -18,6 +18,7 @@ int main()
 			exit(-1); 
 		}
 		if (WIFEXITED(status))
+			printf("Child process exit success!\n"); 
 			printf("WEXITSTATUS is %d\n", WEXITSTATUS(status)); 
 		}
 	return 0; 
