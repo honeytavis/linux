@@ -17,13 +17,15 @@ void printids(const char* s)
 void* thr_fn(void* arg)
 {
 	printids("new thread:"); 
-	return ((void*)0); // <=> return (NULL); 
+	return NULL; 
+/// return ((void*)0);
 }
 	
 
 int main()
 {
 	pthread_t ntid; 
+	//int err = pthread_create(&ntid, NULL, &thr_fn, NULL); 
 	int err = pthread_create(&ntid, NULL, thr_fn, NULL); 
 	if (err != 0) {
 		perror("pthread_create(): "); 
