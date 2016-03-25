@@ -79,27 +79,30 @@ int main(int argc, char** argv)
                    epoll_ctl(epoll_fd, EPOLL_CTL_ADD, new_fd, &ev); 
                 }
 
-                if (evs[i].data.fd == 0 && evs[i].events == EPOLLIN) {
-                    bzero(buf, sizeof(buf)); 
-                    read(0, buf, sizeof(buf)); 
-                    int size = send(new_fd, buf, strlen(buf)-1, 0); 
-                    if (-1 == size) {
-                        perror("send()"); 
-                        exit(EXIT_FAILURE); 
-                    } 
-                }
+                if (new_fd > 0) {
+                    if (evs[i].data.fd == 0 && evs[i].events == EPOLLIN) {
+                        bzero(buf, sizeof(buf)); 
+                        read(0, buf, sizeof(buf)); 
+                        int size = send(new_fd, buf, strlen(buf)-1, 0); 
+                        if (-1 == size) {
+                            perror("send()"); 
+                            exit(EXIT_FAILURE); 
+                        } 
+                    }
 
-                if (evs[i].data.fd == new_fd && evs[i].events == EPOLLIN) {
-                    bzero(buf, sizeof(buf)); 
-                    int size = recv(new_fd, buf, sizeof(buf), 0); 
-                    if (size > 0) {
-                        printf("%s\n", buf); 
-                    } else {
-                        printf("recv return is %d\n", size); 
+                    if (evs[i].data.fd == new_fd && evs[i].events == EPOLLIN) {
+                        bzero(buf, sizeof(buf)); 
+                        int size = recv(new_fd, buf, sizeof(buf), 0); 
+                        if (size > 0) {
+                            printf("%s\n", buf); 
+                        } else (0 == size) {
+                            ev.events = EPOLLIN; 
+                            ev.data.fd = new_fd; 
+                            epoll_ctl(epoll_fd, EPOLL_CTL_DEL, new_fd, &ev); 
+                        }
                     }
                 }
             }
-            
         }
     }
     close(socket_fd); 
