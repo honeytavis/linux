@@ -1,30 +1,42 @@
+# =========================================================================
+# Source files, Object files, etc...
+# =========================================================================
+
+DIR_INC  := $(wildcard include)
+DIR_SRC  := $(wildcard src)
+DIR_OBJ  := $(wildcard obj)
+DIR_BIN  := $(wildcard bin)
+
+#EXT      := cc
+EXT      := c
+INCLUDE  := -I$(DIR_INC)
+SRC      := $(wildcard $(DIR_SRC)/*.$(EXT))
+OBJ      := $(patsubst $(DIR_SRC)/%.$(EXT), $(DIR_OBJ)/%.o, $(SRC))
+#OBJ      := $(patsubst %.$(EXT), $(DIR_OBJ)/%.o, $(notdir $(SRC)))
+TARGET   := $(DIR_BIN)/main
+
+# =========================================================================
 # Make variables (CC, etc...)
-CC			:= gcc
-CFLAGS		 = -Wall -I $(DIR_INC)
+# =========================================================================
 
-DIR_INC 	:= $(wildcard include) 
-DIR_SRC 	:= $(wildcard src)
-DIR_OBJ 	:= $(wildcard obj)
-DIR_EXE		:= $(wildcard bin)
+CC         := clang 
+CFLAGS     := -Wall
+CXX        := clang++
+CXXFLAGS   := -Wall -std=c++11
 
-SRC 		 = $(wildcard $(DIR_SRC)/*.c)
-OBJ 		 = $(patsubst %.c, $(DIR_OBJ)/%.o, $(notdir $(SRC)))
-TARGET 		 = main.exe
-EXE			:= $(wildcard $(DIR_EXE)/$(TARGET))
-#EXE			:= $(DIR_EXE)/$(TARGET)
-
-# ===========================================================================
+# =========================================================================
 # Rules shared between targets and prerequisites
+# =========================================================================
 
-#$(EXE): $(OBJ)
-$(DIR_EXE)/$(TARGET): $(OBJ)
-	$(CC) $^ -o $@
+$(TARGET): $(OBJ)
+	$(CXX) $^ -o $@
 
-$(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
-	$(CC) -c $< -o $@ $(CFLAGS) 
+$(DIR_OBJ)/%.o: $(DIR_SRC)/%.$(EXT)
+	$(CXX) -c $^ -o $@ $(CXXFLAGS) $(INCLUDE)
 
 PHONY += clean
 clean: 
-	@rm -f $(EXE) $(OBJ)
+	rm -f $(TARGET) $(OBJ)
+#-@rm -f $(TARGET) $(OBJ)
 
 .PHONY: PHONY
