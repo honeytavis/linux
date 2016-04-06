@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -95,7 +96,7 @@ int main(int argc, char** argv)
                         int size = recv(new_fd, buf, sizeof(buf), 0); 
                         if (size > 0) {
                             printf("%s\n", buf); 
-                        } else (0 == size) {
+                        } else if (0 == size) {
                             ev.events = EPOLLIN; 
                             ev.data.fd = new_fd; 
                             epoll_ctl(epoll_fd, EPOLL_CTL_DEL, new_fd, &ev); 
@@ -105,6 +106,7 @@ int main(int argc, char** argv)
             }
         }
     }
+
     close(socket_fd); 
 
     return 0; 
