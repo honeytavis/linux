@@ -2,18 +2,18 @@
 # Source files, Object files, etc...
 # =========================================================================
 
-DIR_INC  := $(wildcard include)
-DIR_SRC  := $(wildcard src)
-DIR_OBJ  := $(wildcard obj)
-DIR_BIN  := $(wildcard bin)
+DIR_INC := $(wildcard include)
+DIR_SRC := $(wildcard src)
+DIR_OBJ := $(wildcard obj)
+DIR_BIN := $(wildcard bin)
 
-#EXT      := cc
-EXT      := c
-INCLUDE  := -I$(DIR_INC)
-SRC      := $(wildcard $(DIR_SRC)/*.$(EXT))
-OBJ      := $(patsubst $(DIR_SRC)/%.$(EXT), $(DIR_OBJ)/%.o, $(SRC))
-#OBJ      := $(patsubst %.$(EXT), $(DIR_OBJ)/%.o, $(notdir $(SRC)))
-TARGET   := $(DIR_BIN)/main
+#EXT			:= c
+EXT			:= cc
+INCLUDE	:= -I$(DIR_INC)
+SRC			:= $(wildcard $(DIR_SRC)/*.$(EXT))
+OBJ			:= $(patsubst $(DIR_SRC)/%.$(EXT), $(DIR_OBJ)/%.o, $(SRC))
+#OBJ			:= $(patsubst %.$(EXT), $(DIR_OBJ)/%.o, $(notdir $(SRC)))
+TARGET	:= $(DIR_BIN)/main
 
 # =========================================================================
 # Make variables (CC, etc...)
@@ -36,7 +36,6 @@ $(DIR_OBJ)/%.o: $(DIR_SRC)/%.$(EXT)
 
 PHONY += clean
 clean: 
-	rm -f $(TARGET) $(OBJ)
-#-@rm -f $(TARGET) $(OBJ)
+	-@rm -f $(TARGET) $(OBJ)
 
 .PHONY: PHONY
